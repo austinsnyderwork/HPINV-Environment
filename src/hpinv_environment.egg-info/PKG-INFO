@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: hpinv_environment
+Version: 0.0.1
+Summary: Builds the providers, organizations, and worksites that make up HPINV. Does not handle WorksiteHistory.
+Author-email: Austin Snyder <austin-snyder@uiowa.edu>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: dataclasses
+Requires-Dist: pathlib
+Requires-Dist: datetime
+Requires-Dist: hpinv_enums
+Requires-Dist: pandas

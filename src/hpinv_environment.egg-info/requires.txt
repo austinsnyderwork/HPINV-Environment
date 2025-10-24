@@ -1,0 +1,5 @@
+dataclasses
+pathlib
+datetime
+hpinv_enums
+pandas

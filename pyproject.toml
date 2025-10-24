@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "hpinv_environment"
+version = "0.0.1"
+authors = [
+    { name="Austin Snyder", email="austin-snyder@uiowa.edu" },
+]
+description = "Builds the providers, organizations, and worksites that make up HPINV. Does not handle WorksiteHistory."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "dataclasses",
+    "pathlib",
+    "datetime",
+    "hpinv_enums",
+    "pandas"
+]
