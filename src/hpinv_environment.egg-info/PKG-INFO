@@ -8,5 +8,4 @@ Description-Content-Type: text/markdown
 Requires-Dist: dataclasses
 Requires-Dist: pathlib
 Requires-Dist: datetime
-Requires-Dist: hpinv_enums
 Requires-Dist: pandas

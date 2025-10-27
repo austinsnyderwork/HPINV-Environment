@@ -68,9 +68,13 @@ class Provider:
                  hcp_id: int,
                  type_id: TypeId,
                  first_name: str,
-                 last_name: str):
+                 last_name: str,
+                 **additional_attributes):
         setattr(self, HcpColumn.HCP_ID.value, hcp_id)
         setattr(self, HcpColumn.TYPE_ID.value, type_id)
         setattr(self, HcpColumn.FIRST_NAME.value, first_name)
         setattr(self, HcpColumn.LAST_NAME.value, last_name)
+
+        for k, v in additional_attributes.items():
+            setattr(self, k, v)
 

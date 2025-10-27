@@ -13,8 +13,13 @@ def _find_dict_parent(d: dict, parent_key) -> dict | None:
 
 class Organization:
 
-    def __init__(self, ultimate_parent_worksite_id: int):
+    def __init__(self,
+                 ultimate_parent_worksite_id: int,
+                 **additional_attributes):
         self.ultimate_parent_worksite_id = ultimate_parent_worksite_id
+
+        for k, v in additional_attributes.items():
+            setattr(self, k, v)
 
         self.children_hierarchy = dict()
         self.all_worksite_ids = {ultimate_parent_worksite_id}

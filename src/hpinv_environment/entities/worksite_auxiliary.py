@@ -1,5 +1,5 @@
 
-from hpinv_enums import AuxiliaryColumn
+from hpinv_enums import AuxiliaryColumn, WorksiteColumn
 
 
 class AuxiliaryByHours:
@@ -13,16 +13,13 @@ class AuxiliaryByHours:
 
 class WorksiteAuxiliary:
 
-    def __init__(self):
+    def __init__(self, worksite_id: int):
+        setattr(self, WorksiteColumn.WORKSITE_ID.value, worksite_id)
         setattr(self, AuxiliaryColumn.ASSISTANTS.value, dict())
         setattr(self, AuxiliaryColumn.HYGIENISTS.value, dict())
         setattr(self, AuxiliaryColumn.TRAINING_ASSISTANTS.value, dict())
 
         self.auxiliary_by_hours = dict()
-
-    @property
-    def all_hours(self) -> set:
-        return set(self.auxiliary_by_hours.keys())
 
     def add_auxiliary(self, auxiliary_type: AuxiliaryColumn, count: int, hours: int):
 
@@ -32,7 +29,4 @@ class WorksiteAuxiliary:
         aux_hours_object = self.auxiliary_by_hours[hours]
         current_count = getattr(aux_hours_object, auxiliary_type.value)
         setattr(self.auxiliary_by_hours[hours], auxiliary_type.value, current_count + count)
-
-    def fetch_auxiliary_staff(self):
-        return self.auxiliary_by_hours
 

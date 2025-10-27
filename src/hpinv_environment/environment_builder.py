@@ -1,5 +1,3 @@
-
-from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
@@ -8,17 +6,48 @@ from .factories import create_organizations, create_providers, create_worksites
 from .entities.organization import Organization
 from .entities.provider import Provider
 from .entities.worksite import Worksite
+from .entities.worksite import WorksiteAuxiliary
 
 import hpinv_sql
 import hpinv_enums
 
 
-@dataclass
 class HpinvEnvironment:
-    providers: set[Provider]
-    worksites: set[Worksite]
-    organizations: set[Organization]
 
+    def __init__(self,
+                 providers: dict[int: Provider],
+                 worksites: dict[int: Worksite],
+                 worksite_auxiliaries: dict[int: WorksiteAuxiliary],
+                 organizations: dict[int: Organization]
+                 ):
+        self._providers = providers
+        self._worksites = worksites
+        self._worksite_auxiliaries = worksite_auxiliaries
+        self._organizations = organizations
+
+    @property
+    def providers(self):
+        return set(self._providers.values())
+
+    @property
+    def worksites(self):
+        return set(self._worksites.values())
+
+    @property
+    def organizations(self):
+        return set(self._organizations.values())
+
+    def fetch_provider(self, hcp_id: int):
+        return self._providers[hcp_id]
+
+    def fetch_worksite(self, worksite_id: int):
+        return self._worksites[worksite_id]
+
+    def fetch_worksite_auxiliary(self, worksite_id: int):
+        return self._worksite_auxiliaries[worksite_id]
+
+    def fetch_organization(self, ultimate_parent_worksite_id: int):
+        return self._organizations[ultimate_parent_worksite_id]
 
 class WorksitesPullSpec(hpinv_sql.QueryPullSpec):
 
@@ -66,5 +95,3 @@ class EnvironmentBuilder:
             providers=providers,
             organizations=organizations
         )
-
-
