@@ -67,14 +67,17 @@ class Provider:
     def __init__(self,
                  hcp_id: int,
                  type_id: TypeId,
-                 first_name: str,
-                 last_name: str,
-                 **additional_attributes):
+                 additional_attributes: dict = None):
+        self.hcp_id = hcp_id
         setattr(self, HcpColumn.HCP_ID.value, hcp_id)
+        self.type_id = type_id
         setattr(self, HcpColumn.TYPE_ID.value, type_id)
-        setattr(self, HcpColumn.FIRST_NAME.value, first_name)
-        setattr(self, HcpColumn.LAST_NAME.value, last_name)
 
-        for k, v in additional_attributes.items():
-            setattr(self, k, v)
+        if additional_attributes:
+            for k, v in additional_attributes.items():
+                setattr(self, k, v)
+
+    @property
+    def full_name(self) -> str:
+        return f"{getattr(self, HcpColumn.FIRST_NAME.value)} {getattr(self, HcpColumn.LAST_NAME.value)}"
 

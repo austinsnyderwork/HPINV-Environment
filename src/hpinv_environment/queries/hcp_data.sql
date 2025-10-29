@@ -1,4 +1,8 @@
 
-SELECT HcpId, TypeId, FirstName, LastName
+SELECT
+    HcpId,
+    TypeId,
+    FirstName,
+    LastName
 FROM Hcp
 

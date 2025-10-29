@@ -2,14 +2,14 @@
 SELECT
     w.WorksiteId,
     w.WorksiteName,
-    w.ParentWorksite as ParentWorksiteId,
-    wd.TransactionId AS DetailActive,
-    wd.PhoneArea + '-' + wd.Phone as Phone,
-    w.City,
+    w.ParentWorksite,
+    wd.TransactionId,
+    wd.PhoneArea + '-' + wd.Phone AS Phone,
+    w.city,
     w.Address1,
     w.Address2,
-    w.Zip,
-    w.State,
+    w.zip,
+    w.state,
     wd.CallDate
 FROM Worksite w
 LEFT JOIN WorksiteDetail wd

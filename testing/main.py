@@ -1,5 +1,5 @@
 
-from src import EnvironmentBuilder
+from src.hpinv_environment import EnvironmentBuilder
 
 import hpinv_enums
 

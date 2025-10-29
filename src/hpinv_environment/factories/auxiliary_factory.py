@@ -1,12 +1,18 @@
 
 import pandas as pd
 
+from ..entities import WorksiteAuxiliary
+
 from hpinv_enums import WorksiteColumn, AuxiliaryColumn
 
 
-def _apply_create_auxiliary(row, worksites: dict):
+def _apply_create_auxiliary(row, auxiliaries: dict):
     worksite_id = int(row[WorksiteColumn.WORKSITE_ID.value])
-    worksite = worksites[worksite_id]
+
+    if worksite_id not in auxiliaries:
+        auxiliaries[worksite_id] = WorksiteAuxiliary(worksite_id=worksite_id)
+
+    aux = auxiliaries[worksite_id]
 
     work_hours = int(row[AuxiliaryColumn.HOURS.value])
 
@@ -14,26 +20,29 @@ def _apply_create_auxiliary(row, worksites: dict):
     hygienists = int(row[AuxiliaryColumn.HYGIENISTS.value])
     training_assistants = int(row[AuxiliaryColumn.TRAINING_ASSISTANTS.value])
 
-    worksite.auxiliary.add_auxiliary(
+    aux.add_auxiliary(
         auxiliary_type=AuxiliaryColumn.ASSISTANTS,
         count=assistants,
         hours=work_hours
     )
 
-    worksite.auxiliary.add_auxiliary(
+    aux.add_auxiliary(
         auxiliary_type=AuxiliaryColumn.HYGIENISTS,
         count=hygienists,
         hours=work_hours
     )
 
-    worksite.auxiliary.add_auxiliary(
+    aux.add_auxiliary(
         auxiliary_type=AuxiliaryColumn.TRAINING_ASSISTANTS,
         count=training_assistants,
         hours=work_hours
     )
 
 
-def fill_worksites_with_auxiliary(auxiliary_df: pd.DataFrame, worksites: dict):
-    auxiliary_df.apply(_apply_create_auxiliary, worksites=worksites, axis=1)
+def create_auxiliaries(auxiliary_df: pd.DataFrame) -> dict:
+    auxiliaries = dict()
+    auxiliary_df.apply(_apply_create_auxiliary, args=(auxiliaries,), axis=1)
+
+    return auxiliaries
 
 
