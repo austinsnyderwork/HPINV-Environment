@@ -1,8 +1,8 @@
 
 
-def create_attributes_from_enums(row, enums: list):
+def create_attributes_from_cols(row, cols: list[str]):
     atts = {
-        enum.value: row[enum.value]
-        for enum in enums
+        col: row[col]
+        for col in cols
     }
     return atts

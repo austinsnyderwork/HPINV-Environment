@@ -3,26 +3,24 @@ import pandas as pd
 
 from ..entities import Provider
 from hpinv_enums import HcpColumn
-from . import utils
+from .utils import create_attributes_from_enums
 
 
 class ProviderFactory:
 
     def __init__(
             self,
-            hcp_id_col_name: str = None,
-            additional_attribute_cols: list[str] = None,
+            additional_attribute_enums: list[HcpColumn]
     ):
-        self.hcp_id_col_name = hcp_id_col_name if hcp_id_col_name else HcpColumn.HCP_ID.value
-        self.additional_attribute_cols = additional_attribute_cols or []
+        self.additional_attribute_enums = additional_attribute_enums
 
     def _apply_create_provider(self, row, providers: dict):
-        provider_id = row[self.hcp_id_col_name]
+        provider_id = row[HcpColumn.HCP_ID.value]
 
         if provider_id not in providers:
-            atts = utils.create_attributes_from_cols(
+            atts = create_attributes_from_enums(
                 row=row,
-                cols=self.additional_attribute_cols
+                enums=self.additional_attribute_enums
             )
             new_provider = Provider(
                 hcp_id=provider_id,

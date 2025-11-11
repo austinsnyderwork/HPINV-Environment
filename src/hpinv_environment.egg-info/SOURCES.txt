@@ -15,4 +15,5 @@ src/hpinv_environment/factories/__init__.py
 src/hpinv_environment/factories/auxiliary_factory.py
 src/hpinv_environment/factories/organization_factory.py
 src/hpinv_environment/factories/provider_factory.py
+src/hpinv_environment/factories/utils.py
 src/hpinv_environment/factories/worksite_factory.py

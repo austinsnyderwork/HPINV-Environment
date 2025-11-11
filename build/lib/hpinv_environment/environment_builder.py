@@ -93,14 +93,14 @@ class EnvironmentBuilder:
             hcps_df: pd.DataFrame = None,
             auxiliaries_df: pd.DataFrame = None
     ) -> HpinvEnvironment:
-        sql_manager = hpinv_sql.HpinvSqlManager()
+        sql_manager = hpinv_sql.SqlManager()
 
         if not worksites_df:
             worksites_df = sql_manager.pull(WorksitesPullSpec())
         worksites_df.columns = [col.lower() for col in worksites_df.columns]
 
         worksite_factory = WorksiteFactory(
-            additional_attribute_cols=[e.value for e in worksite_additional_attribute_enums]
+            additional_attribute_enums=worksite_additional_attribute_enums
         )
         worksites = worksite_factory.create_worksites(worksites_df)
 
@@ -109,9 +109,7 @@ class EnvironmentBuilder:
         if not hcps_df:
             hcps_df = sql_manager.pull(HcpsPullSpec())
         hcps_df.columns = [col.lower() for col in hcps_df.columns]
-        provider_factory = ProviderFactory(
-            additional_attribute_cols=[e.value for e in provider_additional_attribute_enums]
-        )
+        provider_factory = ProviderFactory(additional_attribute_enums=provider_additional_attribute_enums)
         providers = provider_factory.create_providers(hcps_df)
 
         if not auxiliaries_df:
