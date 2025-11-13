@@ -22,8 +22,17 @@ class Worksite:
 
         self.provider_ids = set()
 
+    def __key(self):
+        return self.worksite_id
+
     def __hash__(self):
-        return hash(getattr(self, WorksiteColumn.WORKSITE_ID.value))
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        if not isinstance(other, Worksite):
+            return False
+
+        return self.__key() == other.__key()
 
     @property
     def is_ultimate_parent(self):

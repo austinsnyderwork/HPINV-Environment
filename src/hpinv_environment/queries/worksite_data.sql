@@ -3,7 +3,7 @@ SELECT
     w.WorksiteId,
     w.WorksiteName,
     w.ParentWorksite,
-    wd.TransactionId,
+    COALESCE(wd.TransactionId, 'I') as TransactionId,
     wd.PhoneArea + '-' + wd.Phone AS Phone,
     w.city,
     w.Address1,

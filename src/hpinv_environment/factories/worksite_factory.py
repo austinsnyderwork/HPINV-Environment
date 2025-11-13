@@ -15,8 +15,8 @@ class WorksiteFactory:
             parent_worksite_id_col_name: str = None,
             additional_attribute_cols: list[str] = None
     ):
-        self.worksite_id_col_name = worksite_id_col_name if worksite_id_col_name else WorksiteColumn.WORKSITE_ID.value
-        self.parent_worksite_id_col_name = parent_worksite_id_col_name if parent_worksite_id_col_name else WorksiteColumn.PARENT_WORKSITE_ID.value
+        self.worksite_id_col_name = worksite_id_col_name or WorksiteColumn.WORKSITE_ID.value
+        self.parent_worksite_id_col_name = parent_worksite_id_col_name or WorksiteColumn.PARENT_WORKSITE_ID.value
         self.additional_attribute_cols = additional_attribute_cols or []
 
     def _apply_create_worksite(self, row, worksites: dict):

@@ -2,7 +2,7 @@
 import pandas as pd
 
 from ..entities import Provider
-from hpinv_enums import HcpColumn
+from hpinv_enums import HcpColumn, TypeId
 from . import utils
 
 
@@ -24,9 +24,10 @@ class ProviderFactory:
                 row=row,
                 cols=self.additional_attribute_cols
             )
+            type_id = row[HcpColumn.TYPE_ID.value]
             new_provider = Provider(
                 hcp_id=provider_id,
-                type_id=row[HcpColumn.TYPE_ID.value],
+                type_id=TypeId(type_id) if type_id is not None else type_id,
                 additional_attributes=atts
             )
 
