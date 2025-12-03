@@ -11,9 +11,11 @@ src/hpinv_environment/entities/organization.py
 src/hpinv_environment/entities/provider.py
 src/hpinv_environment/entities/worksite.py
 src/hpinv_environment/entities/worksite_auxiliary.py
+src/hpinv_environment/entities/worksite_detail.py
 src/hpinv_environment/factories/__init__.py
 src/hpinv_environment/factories/auxiliary_factory.py
 src/hpinv_environment/factories/organization_factory.py
 src/hpinv_environment/factories/provider_factory.py
 src/hpinv_environment/factories/utils.py
+src/hpinv_environment/factories/worksite_detail_factory.py
 src/hpinv_environment/factories/worksite_factory.py

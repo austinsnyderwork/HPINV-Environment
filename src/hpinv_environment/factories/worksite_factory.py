@@ -31,6 +31,9 @@ class WorksiteFactory:
             new_worksite = Worksite(
                 worksite_id=row[WorksiteColumn.WORKSITE_ID.value],
                 parent_worksite_id=row[WorksiteColumn.PARENT_WORKSITE_ID.value],
+                transaction_id=row[WorksiteColumn.ACTIVE_STATUS.value],
+                address_1=row[WorksiteColumn.ADDRESS_1.value],
+                address_2=row[WorksiteColumn.ADDRESS_2.value],
                 additional_attributes=atts
             )
 
@@ -40,11 +43,12 @@ class WorksiteFactory:
         worksites = dict()
         worksites_df.apply(self._apply_create_worksite, axis=1, args=(worksites,))
 
-        worksites_without_parents = set(worksite for worksite in worksites.values()
-                                        if getattr(worksite, WorksiteColumn.PARENT_WORKSITE_ID.value) not in worksites)
-        for worksite in worksites_without_parents:
+        worksites_with_nonexistent_parent = set(worksite for worksite in worksites.values()
+                                                if getattr(worksite, WorksiteColumn.PARENT_WORKSITE_ID.value) not in worksites)
+        for worksite in worksites_with_nonexistent_parent:
             worksites[worksite.parent_worksite_id] = (
                 Worksite(
+                    exists_in_hpinv=False,
                     worksite_id=worksite.parent_worksite_id,
                     parent_worksite_id=worksite.parent_worksite_id
                 )

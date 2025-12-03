@@ -114,59 +114,84 @@ class AuxiliariesPullSpec(hpinv_sql.QueryPullSpec):
 
 class EnvironmentBuilder:
 
-    @staticmethod
-    def build_environment(
-            worksite_additional_attribute_enums: list[hpinv_enums.WorksiteColumn] = None,
-            worksite_detail_additional_attribute_enums: list[hpinv_enums.WorksiteDetailColumn] = None,
-            provider_additional_attribute_enums: list[hpinv_enums.HcpColumn] = None,
-            existing_hpinv_env: HpinvEnvironment = None,
-            worksites_df: pd.DataFrame = None,
-            worksite_details_df: pd.DataFrame = None,
-            hcps_df: pd.DataFrame = None,
-            auxiliaries_df: pd.DataFrame = None
-    ) -> HpinvEnvironment:
-        sql_manager = hpinv_sql.HpinvSqlManager()
+    def __init__(self):
+        self._sql_manager = hpinv_sql.HpinvSqlManager()
 
+    def create_worksites(self,
+                         worksite_additional_attribute_enums: list[hpinv_enums.WorksiteColumn] = None,
+                         worksites_df: pd.DataFrame = None):
         if not worksites_df:
-            worksites_df = sql_manager.pull(WorksitesPullSpec())
+            worksites_df = self._sql_manager.pull(WorksitesPullSpec())
+
         worksites_df.columns = [col.lower() for col in worksites_df.columns]
 
         worksite_factory = WorksiteFactory(
             additional_attribute_cols=[e.value for e in worksite_additional_attribute_enums] if worksite_additional_attribute_enums else None
         )
         worksites = worksite_factory.create_worksites(worksites_df)
+        return worksites
 
+    def create_worksite_details(self,
+                                worksite_detail_additional_attribute_enums: list[hpinv_enums.WorksiteDetailColumn] = None,
+                                worksite_details_df: pd.DataFrame = None):
         if not worksite_details_df:
-            worksite_details_df = sql_manager.pull(WorksiteDetailsPullSpec())
+            worksite_details_df = self._sql_manager.pull(WorksiteDetailsPullSpec())
         worksite_details_df.columns = [col.lower() for col in worksite_details_df.columns]
         worksite_detail_factory = WorksiteDetailFactory(
             additional_attribute_cols=[e.value for e in worksite_detail_additional_attribute_enums] if worksite_detail_additional_attribute_enums else None
         )
         worksite_details = worksite_detail_factory.create_worksite_details(worksite_details_df)
+        return worksite_details
+
+    def create_organizations(self,
+                             worksites_df: pd.DataFrame = None):
+        if not worksites_df:
+            worksites_df = self._sql_manager.pull(WorksitesPullSpec())
 
         organizations = OrganizationFactory(worksites_df).create_organizations()
 
+        return organizations
+
+    def create_providers(self,
+                         provider_additional_attribute_enums: list[hpinv_enums.HcpColumn] = None,
+                         hcps_df: pd.DataFrame = None):
         if not hcps_df:
-            hcps_df = sql_manager.pull(HcpsPullSpec())
+            hcps_df = self._sql_manager.pull(HcpsPullSpec())
         hcps_df.columns = [col.lower() for col in hcps_df.columns]
         provider_factory = ProviderFactory(
             additional_attribute_cols=[e.value for e in provider_additional_attribute_enums] if provider_additional_attribute_enums else None
         )
         providers = provider_factory.create_providers(hcps_df)
 
+        return providers
+
+    def create_auxiliaries(self,
+                           auxiliaries_df: pd.DataFrame = None):
         if not auxiliaries_df:
-            auxiliaries_df = sql_manager.pull(AuxiliariesPullSpec())
+            auxiliaries_df = self._sql_manager.pull(AuxiliariesPullSpec())
         auxiliaries_df.columns = [col.lower() for col in auxiliaries_df.columns]
         auxiliaries = create_auxiliaries(auxiliaries_df)
 
-        if existing_hpinv_env:
-            existing_hpinv_env._worksites_dict = worksites
-            existing_hpinv_env._worksite_details_dict = worksite_details
-            existing_hpinv_env._worksite_auxiliaries_dict = auxiliaries
-            existing_hpinv_env._providers_dict = providers
-            existing_hpinv_env._organizations_dict = organizations
+        return auxiliaries
 
-            return existing_hpinv_env
+    def build_environment(
+            self,
+            worksite_additional_attribute_enums: list[hpinv_enums.WorksiteColumn] = None,
+            worksite_detail_additional_attribute_enums: list[hpinv_enums.WorksiteDetailColumn] = None,
+            provider_additional_attribute_enums: list[hpinv_enums.HcpColumn] = None,
+            worksites_df: pd.DataFrame = None,
+            worksite_details_df: pd.DataFrame = None,
+            hcps_df: pd.DataFrame = None,
+            auxiliaries_df: pd.DataFrame = None
+    ) -> HpinvEnvironment:
+        worksites = self.create_worksites(worksite_additional_attribute_enums,
+                                          worksites_df)
+        worksite_details = self.create_worksite_details(worksite_detail_additional_attribute_enums,
+                                                        worksite_details_df)
+        auxiliaries = self.create_auxiliaries(auxiliaries_df)
+        providers = self.create_providers(provider_additional_attribute_enums,
+                                          hcps_df)
+        organizations = self.create_organizations(worksites_df)
 
         return HpinvEnvironment(
             worksites=worksites,
