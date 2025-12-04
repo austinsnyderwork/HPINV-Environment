@@ -44,7 +44,7 @@ class WorksiteFactory:
         worksites_df.apply(self._apply_create_worksite, axis=1, args=(worksites,))
 
         worksites_with_nonexistent_parent = set(worksite for worksite in worksites.values()
-                                                if getattr(worksite, WorksiteColumn.PARENT_WORKSITE_ID.value) not in worksites)
+                                                if worksite.parent_worksite_id not in worksites)
         for worksite in worksites_with_nonexistent_parent:
             worksites[worksite.parent_worksite_id] = (
                 Worksite(

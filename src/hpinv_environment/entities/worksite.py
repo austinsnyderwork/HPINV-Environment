@@ -35,7 +35,7 @@ class Worksite:
             for k, v in d.items():
                 setattr(self, k, v)
 
-        self.provider_ids = set(kwargs['provider_ids']) or set()
+        self.provider_ids = set(kwargs['provider_ids']) if 'provider_ids' in kwargs else set()
 
     def __key(self):
         return self.worksite_id
