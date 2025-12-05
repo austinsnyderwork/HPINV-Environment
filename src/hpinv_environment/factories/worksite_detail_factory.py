@@ -11,17 +11,20 @@ class WorksiteDetailFactory:
             self,
             worksite_id_col_name: str = None,
             type_id_col_name: str = None,
-            additional_attribute_cols: list[str] = None
+            additional_attribute_cols: list[WorksiteDetailColumn] = None
     ):
         self._worksite_id_col_name = worksite_id_col_name or WorksiteDetailColumn.WORKSITE_ID.value
         self._type_id_col_name = type_id_col_name or WorksiteDetailColumn.TYPE_ID.value
-        self._additional_attribute_cols = additional_attribute_cols or []
+
+        self._additional_attribute_cols = [
+            e.value for e in additional_attribute_cols
+        ] if additional_attribute_cols else []
 
     def _apply_create_worksite_details(self, row, worksite_details: dict):
         ws_id = row[self._worksite_id_col_name]
         worksite_detail = WorksiteDetail(
             worksite_id=ws_id,
-            type_id=TypeId(row[self._type_id_col_name]),
+            type_id=TypeId(row[self._type_id_col_name]).value,
             additional_attributes={
                 k: row[k] for k in self._additional_attribute_cols
             }

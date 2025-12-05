@@ -1,17 +1,21 @@
-from hpinv_enums import HcpColumn, TypeId
+from hpinv_enums import HcpColumn, TypeId, ActiveStatus
 
 
 class WorksiteDetail:
 
     def __init__(self,
                  worksite_id: int,
-                 type_id: TypeId,
-                 additional_attributes: dict = None):
+                 type_id: str,
+                 additional_attributes: dict = None,
+                 **kwargs):
         self.worksite_id = worksite_id
-        self.type_id = type_id
+        self.type_id = TypeId(type_id)
 
-        if additional_attributes:
-            for k, v in additional_attributes.items():
+        if additional_attributes or kwargs:
+            additional_attributes = additional_attributes or dict()
+            kwargs = kwargs or dict()
+            d = additional_attributes | kwargs
+            for k, v in d.items():
                 setattr(self, k, v)
 
     def __key(self):

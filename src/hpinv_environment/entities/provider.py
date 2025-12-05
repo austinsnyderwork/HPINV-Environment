@@ -6,27 +6,9 @@ from hpinv_enums import HcpColumn, HcpPositionColumn, WorksiteColumn, TypeId
 class WorksitePosition:
 
     def __init__(self,
-                 worksite_history_id: int,
-                 effect_date: date,
-                 worksite_id: int,
-                 specialty: str,
-                 fte: str,
-                 work_hours: int,
-                 work_weeks: int,
-                 face_time: int,
-                 percent_medicaid: int,
-                 percent_sliding_fee: int
-                 ):
-        setattr(self, HcpPositionColumn.WORKSITE_HISTORY_ID.value, worksite_history_id)
-        setattr(self, HcpPositionColumn.EFFECT_DATE.value, effect_date)
-        setattr(self, WorksiteColumn.WORKSITE_ID.value, worksite_id)
-        setattr(self, HcpPositionColumn.SPECIALTY_NAME.value, specialty)
-        setattr(self, HcpPositionColumn.FTE.value, fte)
-        setattr(self, HcpPositionColumn.WORK_HOURS.value, work_hours)
-        setattr(self, HcpPositionColumn.WORK_WEEKS.value, work_weeks)
-        setattr(self, HcpPositionColumn.FACE_TIME.value, face_time)
-        setattr(self, HcpPositionColumn.PERCENT_MEDICAID.value, percent_medicaid)
-        setattr(self, HcpPositionColumn.PERCENT_SLIDING_FEE.value, percent_sliding_fee)
+                 attributes: dict):
+        for k, v in attributes.items():
+            setattr(self, k, v)
 
     def __hash__(self):
         return hash(getattr(self, HcpPositionColumn.WORKSITE_HISTORY_ID.value))

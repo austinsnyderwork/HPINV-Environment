@@ -2,7 +2,6 @@
 import pandas as pd
 
 from ..entities import Worksite
-from . import utils
 
 from hpinv_enums import WorksiteColumn
 
@@ -23,18 +22,10 @@ class WorksiteFactory:
         worksite_id = row[WorksiteColumn.WORKSITE_ID.value]
 
         if worksite_id not in worksites:
-            atts = utils.create_attributes_from_cols(
-                row=row,
-                cols=self.additional_attribute_cols
-            )
-
             new_worksite = Worksite(
                 worksite_id=row[WorksiteColumn.WORKSITE_ID.value],
                 parent_worksite_id=row[WorksiteColumn.PARENT_WORKSITE_ID.value],
-                transaction_id=row[WorksiteColumn.ACTIVE_STATUS.value],
-                address_1=row[WorksiteColumn.ADDRESS_1.value],
-                address_2=row[WorksiteColumn.ADDRESS_2.value],
-                additional_attributes=atts
+                additional_attributes={col: row[col] for col in self.additional_attribute_cols}
             )
 
             worksites[worksite_id] = new_worksite

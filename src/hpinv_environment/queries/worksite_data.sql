@@ -3,14 +3,10 @@ SELECT
     w.WorksiteId,
     w.WorksiteName,
     w.ParentWorksite,
-    COALESCE(wd.TransactionId, 'I') as TransactionId,
-    wd.PhoneArea + '-' + wd.Phone AS Phone,
+    w.TransactionId,
     w.city,
     w.Address1,
     w.Address2,
     w.zip,
-    w.state,
-    wd.CallDate
+    w.state
 FROM Worksite w
-LEFT JOIN WorksiteDetail wd
-    ON w.WorksiteId = wd.WorksiteId

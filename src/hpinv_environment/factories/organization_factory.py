@@ -102,7 +102,7 @@ class OrganizationFactory:
                 loop_count=self.loop_count - 1
             )
             if not new_parents:
-                raise RuntimeError(f"Worksites {self.unplaced_children} are unable to be placed by loop {loop}.")
+                raise RuntimeError(f"Worksites {self.unplaced_children} are unable to be placed by loop {self.loop_count}.")
 
             print(f"Organization creation loop: {self.loop_count}")
             for parent_worksite_id in new_parents:
