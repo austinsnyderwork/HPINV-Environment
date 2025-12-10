@@ -51,6 +51,8 @@ class Worksite:
         city = getattr(self, WorksiteColumn.CITY.value, "")
         state = getattr(self, WorksiteColumn.STATE.value, "")
         zip_code = getattr(self, WorksiteColumn.ZIP.value, "")
+        if zip_code and not pd.isna(zip_code):
+            zip_code = int(zip_code)
         country = "USA"
 
         comma_parts = [city, state, zip_code, country]

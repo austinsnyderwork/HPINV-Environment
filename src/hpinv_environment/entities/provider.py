@@ -63,3 +63,5 @@ class Provider:
     def full_name(self) -> str:
         return f"{getattr(self, HcpColumn.FIRST_NAME.value)} {getattr(self, HcpColumn.LAST_NAME.value)}"
 
+    def to_dict(self) -> dict:
+        return self.__dict__
